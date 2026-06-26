@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FinSaathi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🌾 FinSaathi Rural Credit Assistant</h1>
+
+    <div class="card">
+
+        <h2>Applicant Information</h2>
+
+        <form action="/analyze" method="post">
+
+            <input name="name" placeholder="Name" required>
+
+            <input name="village" placeholder="Village" required>
+
+            <input name="state" placeholder="State" required>
+
+            <input name="age" type="number" placeholder="Age" required>
+
+            <input name="occupation" placeholder="Occupation" required>
+
+            <input name="monthly_income"
+                   type="number"
+                   placeholder="Monthly Income (₹)"
+                   required>
+
+            <input name="land_acres"
+                   type="number"
+                   step="0.1"
+                   placeholder="Land Acres">
+
+            <input name="crop_type"
+                   placeholder="Crop Type">
+
+            <input name="mobile_recharges"
+                   type="number"
+                   placeholder="Mobile Recharges Per Month">
+
+            <input name="years_in_village"
+                   type="number"
+                   placeholder="Years in Village">
+
+            <select name="has_bank_account">
+                <option value="1">Has Bank Account</option>
+                <option value="0">No Bank Account</option>
+            </select>
+
+            <input name="existing_loans"
+                   type="number"
+                   placeholder="Existing Loans (₹)">
+
+            <button type="submit">
+                Analyze Profile
+            </button>
+
+        </form>
+
+    </div>
+
+    {% if result %}
+
+    <div class="card">
+
+        <h2>Credit Assessment</h2>
+
+        <div class="score">
+            {{ result.credit_score.score }}
+        </div>
+
+        <p>
+            <strong>Risk Level:</strong>
+            {{ result.credit_score.risk_level }}
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Recommended Loan Schemes</h2>
+
+        {% for rec in result.loan_recommendations.recommendations %}
+
+        <div style="border:1px solid #ddd; padding:15px; margin-bottom:10px; border-radius:8px;">
+
+            <h3>{{ rec.scheme_name }}</h3>
+
+            <p>
+                <strong>Amount:</strong>
+                ₹{{ rec.recommended_amount }}
+            </p>
+
+            <p>
+                <strong>Priority:</strong>
+                {{ rec.priority }}
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <div class="card">
+
+        <h2>Financial Advice</h2>
+
+        <pre style="white-space: pre-wrap;">
+{{ result.financial_advice }}
+        </pre>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
